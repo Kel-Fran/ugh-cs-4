@@ -26,8 +26,8 @@ public sealed record class StreamingPlatform(List<IContent> Contents) : IEnumera
     public void AddContent(IContent content) => Contents.Add(content);
     public IContent? Longest => Contents.MaxBy(x => x.Length);
 
-    IEnumerator IEnumerable.GetEnumerator() => List.GetEnumerator();
-    IEnumerator<IContent> GetEnumerator() => List.GetEnumerator();
+    public IEnumerator IEnumerable.GetEnumerator() => List.GetEnumerator();
+    public IEnumerator<IContent> GetEnumerator() => List.GetEnumerator();
 
     public static StreamingPlatform FromUTF8File(FileInfo file)
     {
