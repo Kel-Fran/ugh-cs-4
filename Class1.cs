@@ -10,13 +10,8 @@ public sealed record class Video(string Title, int Length) : IContent;
 
 public sealed record class Movie(Video Video) : IContent
 {
-    string Title => Video.Title;
-
-    string IContent.Title => Title;
-
-    int Length => Video.Length;
-
-    int IContent.Length => Length;
+    public string Title => Video.Title;
+    public int Length => Video.Length;
 }
 
 public sealed record class Series(string Title, IReadOnlyCollection<Video> Episodes) : IContent
@@ -26,10 +21,13 @@ public sealed record class Series(string Title, IReadOnlyCollection<Video> Episo
     public Series(string title, Video firstEpisode): this(title, [firstEpisode]) {}
 }
 
-public sealed record class StreamingPlatform(List<IContent> Contents)
+public sealed record class StreamingPlatform(List<IContent> Contents) : IEnumerable<IContent>, IEnumerable
 {
-    void AddContent(IContent content) => Contents.Add(content);
-    IContent? Longest => Contents.MaxBy(x => x.Length);
+    public void AddContent(IContent content) => Contents.Add(content);
+    public IContent? Longest => Contents.MaxBy(x => x.Length);
+
+    IEnumerator IEnumerable.GetEnumerator() => List.GetEnumerator();
+    IEnumerator<IContent> GetEnumerator() => List.GetEnumerator();
 
     public static StreamingPlatform FromUTF8File(FileInfo file)
     {
